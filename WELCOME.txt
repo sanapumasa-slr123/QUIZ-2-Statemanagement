@@ -4,15 +4,52 @@ Frontend: React 19 SPA
 Backend: Django REST Framework
 Status: Complete
 
+QUIZ 2 REQUIREMENTS MET:
+
+1. ENVIRONMENT VARIABLES
+   Frontend: .env with REACT_APP_API_URL=http://localhost:8000/api
+   Backend: .env with DEBUG, SECRET_KEY, ALLOWED_HOSTS, CORS_ALLOWED_ORIGINS
+
+2. THREE API VIEWS
+   - List View: GET /api/services/, /api/team/, /api/testimonials/, /api/contact/
+   - Detail View: GET /api/services/{id}/, /api/team/{id}/, etc.
+   - API Routes View: GET /api/routes/ (returns all available endpoints)
+
+3. CORS CONFIGURATION
+   - CORS_ALLOW_ALL_ORIGINS = False (NOT ALLOWED)
+   - CORS_ALLOWED_ORIGINS = localhost:3000, localhost:3001
+
+4. MODELS
+   - Service (name, description, service_type, icon, is_active)
+   - TeamMember (name, position, email, phone, bio, image_url)
+   - Testimonial (author_name, message, rating, is_featured)
+   - ContactInquiry (name, email, phone, subject, message, status)
+
+5. PROPER SERIALIZATION
+   - ServiceSerializer
+   - TeamMemberSerializer
+   - TestimonialSerializer
+   - ContactInquirySerializer
+   - APIRoutesSerializer
+
+6. FILES INCLUDED
+   - requirements.txt (with all dependencies)
+   - .gitignore (excludes venv)
+   - Detailed README.md files
+
+7. PROJECT STRUCTURE
+   - Both frontend and backend in same repository
+   - db.sqlite3 file included with sample data
+
 Setup Instructions:
 
-Frontend:
+FRONTEND:
 1. cd C:\Users\aguil\AGUILAR
 2. npm install
 3. npm start
 Port: http://localhost:3001
 
-Backend:
+BACKEND:
 1. cd backend
 2. venv\Scripts\activate
 3. pip install -r requirements.txt
@@ -21,18 +58,28 @@ Backend:
 6. python manage.py runserver
 Port: http://localhost:8000
 
+VERIFY API ENDPOINTS:
+- Services: http://localhost:8000/api/services/
+- Team: http://localhost:8000/api/team/
+- Testimonials: http://localhost:8000/api/testimonials/
+- Contact: http://localhost:8000/api/contact/
+- Routes: http://localhost:8000/api/routes/
+
 Features:
 - Home, About, Contact pages
-- Services listing
-- Team member profiles
-- Testimonials
-- Contact form
+- Services listing (from API)
+- Team member profiles (from API)
+- Testimonials (from API)
+- Contact form (submits to API)
 - Mobile responsive design
 - Backend API with Django REST Framework
-- SQLite database
+- SQLite database with sample data
+- Axios for frontend-backend communication
 
 Tech Stack:
-- Frontend: React 19, React Router, Bootstrap 5
-- Backend: Django 4.2, Django REST Framework
+- Frontend: React 19, React Router, Bootstrap 5, Axios
+- Backend: Django 4.2, Django REST Framework, django-cors-headers
 - Database: SQLite3
 
+Status: ALL QUIZ 2 REQUIREMENTS MET
+Ready for submission to GitHub.
