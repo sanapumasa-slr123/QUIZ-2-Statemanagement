@@ -23,7 +23,6 @@ function Home() {
     const fetchServices = async () => {
       try {
         const response = await getServices();
-        // Handle both paginated and direct array responses
         const data = response.data.results || response.data;
         setServices(Array.isArray(data) ? data : []);
       } catch (err) {
@@ -37,7 +36,6 @@ function Home() {
     const fetchTestimonials = async () => {
       try {
         const response = await getTestimonials();
-        // Handle both paginated and direct array responses
         const data = response.data.results || response.data;
         setTestimonials(Array.isArray(data) ? data : []);
       } catch (err) {

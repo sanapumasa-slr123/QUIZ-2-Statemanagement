@@ -27,7 +27,6 @@ class ContactInquirySerializer(serializers.ModelSerializer):
 
 
 class APIRoutesSerializer(serializers.Serializer):
-    """Serializer for API routes information"""
     endpoint = serializers.CharField()
     method = serializers.CharField()
     description = serializers.CharField()

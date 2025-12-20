@@ -12,13 +12,10 @@ function About() {
   useEffect(() => {
     const fetchTeamMembers = async () => {
       try {
-        setLoading(true);
         const response = await getTeamMembers();
-        // Handle both paginated and direct array responses
         const data = response.data.results || response.data;
         setTeamMembers(Array.isArray(data) ? data : []);
       } catch (err) {
-        console.error('Error fetching team members:', err);
         setError('Failed to load team members');
       } finally {
         setLoading(false);

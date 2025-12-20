@@ -25,10 +25,9 @@ function FeaturesSection({ title, items, subtitle = null }) {
           {items.map((item) => (
             <div key={item.id} className="col-md-6 col-lg-3">
               <div className="feature-card h-100 p-4 border">
-                <div className="feature-icon mb-3" style={{ fontSize: '2.5rem' }}>
-                  {/* Use icon from item.icon field, or map it from iconMap, or fallback to title's first emoji */}
-                  {iconMap[item.icon] || item.icon || '📌'}
-                </div>
+              <div className="feature-icon mb-3" style={{ fontSize: '2.5rem' }}>
+                {iconMap[item.icon] || item.icon || '📌'}
+              </div>
                 <h5 className="fw-bold mb-2">{item.name || item.title}</h5>
                 <p className="text-muted small">{item.description}</p>
               </div>

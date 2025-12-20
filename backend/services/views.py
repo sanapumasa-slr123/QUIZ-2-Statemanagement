@@ -7,45 +7,26 @@ from .serializers import ServiceSerializer, TeamMemberSerializer, TestimonialSer
 
 
 class ServiceViewSet(viewsets.ModelViewSet):
-    """
-    API endpoint for services.
-    List all services or retrieve a specific service.
-    """
     queryset = Service.objects.filter(is_active=True)
     serializer_class = ServiceSerializer
 
 
 class TeamMemberViewSet(viewsets.ModelViewSet):
-    """
-    API endpoint for team members.
-    List all team members or retrieve a specific team member.
-    """
     queryset = TeamMember.objects.all()
     serializer_class = TeamMemberSerializer
 
 
 class TestimonialViewSet(viewsets.ModelViewSet):
-    """
-    API endpoint for testimonials.
-    List all testimonials or retrieve a specific testimonial.
-    """
     queryset = Testimonial.objects.all()
     serializer_class = TestimonialSerializer
 
 
 class ContactInquiryViewSet(viewsets.ModelViewSet):
-    """
-    API endpoint for contact inquiries.
-    List all inquiries or create a new inquiry.
-    """
     queryset = ContactInquiry.objects.all()
     serializer_class = ContactInquirySerializer
 
 
 class APIRoutesView(APIView):
-    """
-    API endpoint that lists all available routes and their descriptions.
-    """
     def get(self, request):
         routes = [
             {
