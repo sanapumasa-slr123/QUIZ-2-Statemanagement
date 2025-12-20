@@ -2,7 +2,30 @@
 
 Django REST Framework backend for Mabalacat City Water District website.
 
-## Setup
+## Frontend Setup (React)
+
+The frontend is located in the parent directory. To set up and run the React frontend:
+
+```bash
+cd ..
+npm install
+npm start
+```
+
+Frontend runs at `http://localhost:3001`
+
+**Frontend Stack:**
+- React 19 (Single Page Application)
+- React Router v6 (Navigation)
+- Bootstrap 5 + Bootswatch Lux theme (Styling)
+- Axios (HTTP client for API communication)
+
+**Frontend Pages:**
+- **Home**: Hero section, services listing, testimonials carousel
+- **About**: Team member profiles with images
+- **Contact**: Contact form that submits to backend API
+
+## Backend Setup
 
 ### Activate Virtual Environment
 ```bash
