@@ -1,0 +1,38 @@
+﻿MCWD Website - Full Stack Project
+
+Frontend: React 19 SPA
+Backend: Django REST Framework
+Status: Complete
+
+Setup Instructions:
+
+Frontend:
+1. cd C:\Users\aguil\AGUILAR
+2. npm install
+3. npm start
+Port: http://localhost:3001
+
+Backend:
+1. cd backend
+2. venv\Scripts\activate
+3. pip install -r requirements.txt
+4. python manage.py migrate
+5. python manage.py load_sample_data
+6. python manage.py runserver
+Port: http://localhost:8000
+
+Features:
+- Home, About, Contact pages
+- Services listing
+- Team member profiles
+- Testimonials
+- Contact form
+- Mobile responsive design
+- Backend API with Django REST Framework
+- SQLite database
+
+Tech Stack:
+- Frontend: React 19, React Router, Bootstrap 5
+- Backend: Django 4.2, Django REST Framework
+- Database: SQLite3
+
