@@ -1,18 +1,52 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import HeroSection from '../components/HeroSection.jsx';
 import FeaturesSection from '../components/FeaturesSection.jsx';
 import TestimonialsSection from '../components/TestimonialsSection.jsx';
 import {
   heroContent,
-  services,
   operationalHighlights,
-  testimonials,
   companyInfo
 } from '../data/content.js';
+import { getServices, getTestimonials } from '../services/api.js';
 import '../styles/pages.css';
 
 function Home() {
+  const [services, setServices] = useState([]);
+  const [testimonials, setTestimonials] = useState([]);
+  const [loadingServices, setLoadingServices] = useState(true);
+  const [loadingTestimonials, setLoadingTestimonials] = useState(true);
+  const [errorServices, setErrorServices] = useState(null);
+  const [errorTestimonials, setErrorTestimonials] = useState(null);
+
+  useEffect(() => {
+    const fetchServices = async () => {
+      try {
+        const response = await getServices();
+        setServices(response.data);
+      } catch (err) {
+        console.error('Error fetching services:', err);
+        setErrorServices('Failed to load services');
+      } finally {
+        setLoadingServices(false);
+      }
+    };
+
+    const fetchTestimonials = async () => {
+      try {
+        const response = await getTestimonials();
+        setTestimonials(response.data);
+      } catch (err) {
+        console.error('Error fetching testimonials:', err);
+        setErrorTestimonials('Failed to load testimonials');
+      } finally {
+        setLoadingTestimonials(false);
+      }
+    };
+
+    fetchServices();
+    fetchTestimonials();
+  }, []);
   return (
     <>
       {/* Hero Section */}
@@ -23,11 +57,24 @@ function Home() {
       />
 
       {/* Services Section */}
-      <FeaturesSection
-        title="Our Key Services"
-        subtitle="Comprehensive water solutions for your community"
-        items={services}
-      />
+      {errorServices ? (
+        <div className="alert alert-warning m-5" role="alert">
+          {errorServices}
+        </div>
+      ) : loadingServices ? (
+        <div className="text-center py-5">
+          <div className="spinner-border text-primary" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </div>
+          <p className="mt-3 text-muted">Loading services...</p>
+        </div>
+      ) : (
+        <FeaturesSection
+          title="Our Key Services"
+          subtitle="Comprehensive water solutions for your community"
+          items={services}
+        />
+      )}
 
       {/* Operational Highlights */}
       <section className="highlights-section py-5 bg-light">
@@ -54,7 +101,20 @@ function Home() {
       </section>
 
       {/* Testimonials */}
-      <TestimonialsSection testimonials={testimonials} />
+      {errorTestimonials ? (
+        <div className="alert alert-warning m-5" role="alert">
+          {errorTestimonials}
+        </div>
+      ) : loadingTestimonials ? (
+        <div className="text-center py-5">
+          <div className="spinner-border text-primary" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </div>
+          <p className="mt-3 text-muted">Loading testimonials...</p>
+        </div>
+      ) : (
+        <TestimonialsSection testimonials={testimonials} />
+      )}
 
       {/* Call to Action */}
       <section className="cta-section py-5 bg-primary text-white">

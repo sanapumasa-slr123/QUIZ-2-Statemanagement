@@ -2,6 +2,18 @@ import React from 'react';
 import '../styles/features.css';
 
 function FeaturesSection({ title, items, subtitle = null }) {
+  // Map icon names to emoji/symbols
+  const iconMap = {
+    'droplet': '💧',
+    'beaker': '🧪',
+    'receipt': '📋',
+    'headset': '🎧',
+    'water': '💧',
+    'flask': '🧪',
+    'bill': '📋',
+    'phone': '☎️',
+  };
+
   return (
     <section className="features-section py-5">
       <div className="container">
@@ -14,9 +26,10 @@ function FeaturesSection({ title, items, subtitle = null }) {
             <div key={item.id} className="col-md-6 col-lg-3">
               <div className="feature-card h-100 p-4 border">
                 <div className="feature-icon mb-3" style={{ fontSize: '2.5rem' }}>
-                  {item.icon}
+                  {/* Use icon from item.icon field, or map it from iconMap, or fallback to title's first emoji */}
+                  {iconMap[item.icon] || item.icon || '📌'}
                 </div>
-                <h5 className="fw-bold mb-2">{item.title}</h5>
+                <h5 className="fw-bold mb-2">{item.name || item.title}</h5>
                 <p className="text-muted small">{item.description}</p>
               </div>
             </div>

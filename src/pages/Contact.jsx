@@ -1,18 +1,20 @@
 import React, { useState } from 'react';
 import HeroSection from '../components/HeroSection.jsx';
 import { companyInfo, contactInfo } from '../data/content.js';
+import { submitContactInquiry } from '../services/api.js';
 import '../styles/pages.css';
 
 function Contact() {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    phone: '',
     subject: '',
     message: ''
   });
 
   const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -22,12 +24,26 @@ function Contact() {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (formData.name && formData.email && formData.message) {
+    if (!formData.name || !formData.email || !formData.message) {
+      setError('Please fill in all required fields');
+      return;
+    }
+
+    setLoading(true);
+    setError(null);
+
+    try {
+      await submitContactInquiry(formData);
       setSubmitted(true);
-      setFormData({ name: '', email: '', phone: '', subject: '', message: '' });
+      setFormData({ name: '', email: '', subject: '', message: '' });
       setTimeout(() => setSubmitted(false), 4000);
+    } catch (err) {
+      setError('Failed to submit message. Please try again.');
+      console.error('Error submitting contact form:', err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -122,6 +138,12 @@ function Contact() {
                 </div>
               )}
 
+              {error && (
+                <div className="alert alert-danger alert-dismissible fade show" role="alert">
+                  <strong>Error:</strong> {error}
+                </div>
+              )}
+
               <form onSubmit={handleSubmit}>
                 <div className="mb-3">
                   <label htmlFor="name" className="form-label">Full Name *</label>
@@ -132,6 +154,7 @@ function Contact() {
                     name="name"
                     value={formData.name}
                     onChange={handleChange}
+                    disabled={loading}
                     required
                   />
                 </div>
@@ -145,19 +168,8 @@ function Contact() {
                     name="email"
                     value={formData.email}
                     onChange={handleChange}
+                    disabled={loading}
                     required
-                  />
-                </div>
-
-                <div className="mb-3">
-                  <label htmlFor="phone" className="form-label">Phone Number</label>
-                  <input
-                    type="tel"
-                    className="form-control"
-                    id="phone"
-                    name="phone"
-                    value={formData.phone}
-                    onChange={handleChange}
                   />
                 </div>
 
@@ -170,6 +182,7 @@ function Contact() {
                     name="subject"
                     value={formData.subject}
                     onChange={handleChange}
+                    disabled={loading}
                   />
                 </div>
 
@@ -182,13 +195,14 @@ function Contact() {
                     rows="6"
                     value={formData.message}
                     onChange={handleChange}
+                    disabled={loading}
                     required
                   ></textarea>
                 </div>
 
                 <div className="text-center">
-                  <button type="submit" className="btn btn-primary btn-lg">
-                    Send Message
+                  <button type="submit" className="btn btn-primary btn-lg" disabled={loading}>
+                    {loading ? 'Sending...' : 'Send Message'}
                   </button>
                 </div>
               </form>

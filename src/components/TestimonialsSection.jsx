@@ -20,7 +20,7 @@ function TestimonialsSection({ testimonials }) {
                   "{testimonial.message}"
                 </p>
                 <div className="testimonial-author">
-                  <p className="fw-bold mb-0">{testimonial.name}</p>
+                  <p className="fw-bold mb-0">{testimonial.author_name || testimonial.name}</p>
                   <p className="text-muted small">{testimonial.location}</p>
                 </div>
               </div>

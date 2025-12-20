@@ -1,9 +1,30 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import HeroSection from '../components/HeroSection.jsx';
-import { aboutContent, companyInfo, teamMembers } from '../data/content.js'; // importing data
+import { aboutContent, companyInfo } from '../data/content.js';
+import { getTeamMembers } from '../services/api.js';
 import '../styles/pages.css';
 
-function About() { // about page component
+function About() {
+  const [teamMembers, setTeamMembers] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchTeamMembers = async () => {
+      try {
+        setLoading(true);
+        const response = await getTeamMembers();
+        setTeamMembers(response.data);
+      } catch (err) {
+        console.error('Error fetching team members:', err);
+        setError('Failed to load team members');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchTeamMembers();
+  }, []);
   return (
     <>
       <HeroSection
@@ -75,52 +96,66 @@ function About() { // about page component
       <section className="team-section py-5 bg-light">
         <div className="container">
           <h2 className="display-6 fw-bold mb-5 text-center">Leadership Team</h2>
-          <div className="row g-4">
-            {teamMembers.map((member) => (
-              <div key={member.id} className="col-md-6 col-lg-3">
-                <div className="team-card text-center p-4 bg-white border">
-                  <img
-                    src={member.image}
-                    alt={member.name}
-                    className="img-fluid mb-3 team-image"
-                    style={{ 
-                      width: '100px', 
-                      height: '100px', 
-                      objectFit: 'cover', 
-                      borderRadius: '8px',
-                      backgroundColor: '#f8f9fa'
-                    }}
-                    onError={(e) => {
-                      // Fallback to initials if image fails to load
-                      e.target.style.display = 'none';
-                      e.target.nextSibling.style.display = 'flex';
-                    }}
-                  />
-                  <div 
-                    className="team-image-fallback" 
-                    style={{ 
-                      width: '100px', 
-                      height: '100px', 
-                      margin: '0 auto', 
-                      backgroundColor: '#0066cc', 
-                      color: 'white', 
-                      display: 'none', 
-                      alignItems: 'center', 
-                      justifyContent: 'center', 
-                      fontSize: '24px', 
-                      fontWeight: 'bold', 
-                      marginBottom: '1rem',
-                      borderRadius: '8px'
-                    }}
-                  >
-                    {member.name.split(' ').map(word => word[0]).join('')}
-                  </div>
-                  <h6 className="fw-bold mb-2">{member.name}</h6>
-                  <p className="text-muted small">{member.position}</p>
-                </div>
+          {loading && (
+            <div className="text-center">
+              <div className="spinner-border text-primary" role="status">
+                <span className="visually-hidden">Loading...</span>
               </div>
-            ))}
-          </div>
+              <p className="mt-3 text-muted">Loading team members...</p>
+            </div>
+          )}
+          {error && (
+            <div className="alert alert-warning" role="alert">
+              {error}
+            </div>
+          )}
+          {!loading && !error && (
+            <div className="row g-4">
+              {teamMembers.map((member) => (
+                <div key={member.id} className="col-md-6 col-lg-3">
+                  <div className="team-card text-center p-4 bg-white border">
+                    <img
+                      src={member.image_url}
+                      alt={member.name}
+                      className="img-fluid mb-3 team-image"
+                      style={{ 
+                        width: '100px', 
+                        height: '100px', 
+                        objectFit: 'cover', 
+                        borderRadius: '8px',
+                        backgroundColor: '#f8f9fa'
+                      }}
+                      onError={(e) => {
+                        e.target.style.display = 'none';
+                        e.target.nextSibling.style.display = 'flex';
+                      }}
+                    />
+                    <div 
+                      className="team-image-fallback" 
+                      style={{ 
+                        width: '100px', 
+                        height: '100px', 
+                        margin: '0 auto', 
+                        backgroundColor: '#0066cc', 
+                        color: 'white', 
+                        display: 'none', 
+                        alignItems: 'center', 
+                        justifyContent: 'center', 
+                        fontSize: '24px', 
+                        fontWeight: 'bold', 
+                        marginBottom: '1rem',
+                        borderRadius: '8px'
+                      }}
+                    >
+                      {member.name.split(' ').map(word => word[0]).join('')}
+                    </div>
+                    <h6 className="fw-bold mb-2">{member.name}</h6>
+                    <p className="text-muted small">{member.position}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </section>
     </>
