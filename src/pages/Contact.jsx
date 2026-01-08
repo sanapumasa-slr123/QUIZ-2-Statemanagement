@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import HeroSection from '../components/HeroSection.jsx';
 import { companyInfo, contactInfo } from '../data/content.js';
-import { submitContactInquiry } from '../services/api.js';
+import { useAppStore } from '../store/useAppStore.js';
 import '../styles/pages.css';
 
 function Contact() {
@@ -12,9 +12,7 @@ function Contact() {
     message: ''
   });
 
-  const [submitted, setSubmitted] = useState(false);
-  const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const { contactSubmitted, contactError, contactLoading, submitContact, resetContactStatus } = useAppStore();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -27,24 +25,11 @@ function Contact() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.name || !formData.email || !formData.message) {
-      setError('Please fill in all required fields');
       return;
     }
 
-    setLoading(true);
-    setError(null);
-
-    try {
-      await submitContactInquiry(formData);
-      setSubmitted(true);
-      setFormData({ name: '', email: '', subject: '', message: '' });
-      setTimeout(() => setSubmitted(false), 4000);
-    } catch (err) {
-      setError('Failed to submit message. Please try again.');
-      console.error('Error submitting contact form:', err);
-    } finally {
-      setLoading(false);
-    }
+    await submitContact(formData);
+    setFormData({ name: '', email: '', subject: '', message: '' });
   };
 
   return (
@@ -132,15 +117,15 @@ function Contact() {
             <div className="col-lg-8">
               <h2 className="display-6 fw-bold mb-4 text-center">Send us a Message</h2>
               
-              {submitted && (
+              {contactSubmitted && (
                 <div className="alert alert-success alert-dismissible fade show" role="alert">
                   <strong>Thank You!</strong> Your message has been received. We will get back to you soon.
                 </div>
               )}
 
-              {error && (
+              {contactError && (
                 <div className="alert alert-danger alert-dismissible fade show" role="alert">
-                  <strong>Error:</strong> {error}
+                  <strong>Error:</strong> {contactError}
                 </div>
               )}
 
@@ -154,7 +139,7 @@ function Contact() {
                     name="name"
                     value={formData.name}
                     onChange={handleChange}
-                    disabled={loading}
+                    disabled={contactLoading}
                     required
                   />
                 </div>
@@ -168,7 +153,7 @@ function Contact() {
                     name="email"
                     value={formData.email}
                     onChange={handleChange}
-                    disabled={loading}
+                    disabled={contactLoading}
                     required
                   />
                 </div>
@@ -182,7 +167,7 @@ function Contact() {
                     name="subject"
                     value={formData.subject}
                     onChange={handleChange}
-                    disabled={loading}
+                    disabled={contactLoading}
                   />
                 </div>
 
@@ -195,14 +180,14 @@ function Contact() {
                     rows="6"
                     value={formData.message}
                     onChange={handleChange}
-                    disabled={loading}
+                    disabled={contactLoading}
                     required
                   ></textarea>
                 </div>
 
                 <div className="text-center">
-                  <button type="submit" className="btn btn-primary btn-lg" disabled={loading}>
-                    {loading ? 'Sending...' : 'Send Message'}
+                  <button type="submit" className="btn btn-primary btn-lg" disabled={contactLoading}>
+                    {contactLoading ? 'Sending...' : 'Send Message'}
                   </button>
                 </div>
               </form>

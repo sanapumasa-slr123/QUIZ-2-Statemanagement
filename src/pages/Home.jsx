@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import HeroSection from '../components/HeroSection.jsx';
 import FeaturesSection from '../components/FeaturesSection.jsx';
@@ -8,47 +8,25 @@ import {
   operationalHighlights,
   companyInfo
 } from '../data/content.js';
-import { getServices, getTestimonials } from '../services/api.js';
+import { useAppStore } from '../store/useAppStore.js';
 import '../styles/pages.css';
 
 function Home() {
-  const [services, setServices] = useState([]);
-  const [testimonials, setTestimonials] = useState([]);
-  const [loadingServices, setLoadingServices] = useState(true);
-  const [loadingTestimonials, setLoadingTestimonials] = useState(true);
-  const [errorServices, setErrorServices] = useState(null);
-  const [errorTestimonials, setErrorTestimonials] = useState(null);
+  const {
+    services,
+    testimonials,
+    loadingServices,
+    loadingTestimonials,
+    errorServices,
+    errorTestimonials,
+    fetchServices,
+    fetchTestimonials,
+  } = useAppStore();
 
   useEffect(() => {
-    const fetchServices = async () => {
-      try {
-        const response = await getServices();
-        const data = response.data.results || response.data;
-        setServices(Array.isArray(data) ? data : []);
-      } catch (err) {
-        console.error('Error fetching services:', err);
-        setErrorServices('Failed to load services');
-      } finally {
-        setLoadingServices(false);
-      }
-    };
-
-    const fetchTestimonials = async () => {
-      try {
-        const response = await getTestimonials();
-        const data = response.data.results || response.data;
-        setTestimonials(Array.isArray(data) ? data : []);
-      } catch (err) {
-        console.error('Error fetching testimonials:', err);
-        setErrorTestimonials('Failed to load testimonials');
-      } finally {
-        setLoadingTestimonials(false);
-      }
-    };
-
     fetchServices();
     fetchTestimonials();
-  }, []);
+  }, [fetchServices, fetchTestimonials]);
   return (
     <>
       {/* Hero Section */}
